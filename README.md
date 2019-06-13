@@ -49,3 +49,18 @@ MTV
 - Model(模型) -- Model
 - Template(模板) -- view
 - View -- Controller
+
+## 数据库--用户名和密码
+使用Django自带的用户表
+
+### 登录admin
+地址：http://127.0.0.1:8000/admin
+
+创建超级管理员登录用户名和密码
+```python
+> python3 manage.py createsuperuser
+```
+设置用户名和密码：
+
+- 用户名：admin
+- 密码：admin123456

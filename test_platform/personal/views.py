@@ -1,5 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib import auth  # 认证模块
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -27,29 +29,32 @@ def index(request):
         pass_word = request.POST.get("password", "")
         print(user_name)
         print(pass_word)
+
         if user_name == "" or pass_word == "":
             return render(request, "index.html", {"error": "用户名或密码为空!"})
 
+        user = auth.authenticate(username=user_name, password=pass_word)
+        print("user -->", user)
+        """
         if user_name == "admin" and pass_word == "123123":
             return HttpResponse("登录成功!")
         else:
             return render(request, "index.html", {"error": "用户名或密码为错误!"})
+        """
+        if user is None:
+            return render(request, "index.html", {"error": "用户名或密码为错误!"})
+        else:
+            auth.login(request, user)  # 记录用户登录的状态
+            return HttpResponseRedirect('/manage/')  # 重定向
 
 
-def login_action(request):
-    """
-    处理登录请求
-    :param request:
-    :return:
-    """
-    user_name = request.POST.get("username", "")
-    pass_word = request.POST.get("password", "")
-    print(user_name)
-    print(pass_word)
-    if user_name == "" or pass_word == "":
-        return render(request, "index.html", {"error": "用户名或密码为空!"})
+# 项目管理
+@login_required
+def manage(request):
+    return render(request, 'manage.html')
 
-    if user_name == "admin" and pass_word == "123123":
-        return HttpResponse("登录成功!")
-    else:
-        return render(request, "index.html", {"error": "用户名或密码为错误!"})
+
+# 处理用户的退出
+def logout(request):
+    auth.logout(request)  # Django自带的退出,可清除session
+    return HttpResponseRedirect('/index/')
