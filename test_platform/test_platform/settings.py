@@ -34,8 +34,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles',  # 必须有,才可以配置本地静态文件
     'personal',
+    'bootstrap3'
 ]
 
 MIDDLEWARE = [
@@ -113,3 +114,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# 需要制定到stati目录
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static")
+]

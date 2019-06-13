@@ -3,18 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <title>index</title>
+    <!--{% load static %}-->
+    <!--<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}">-->
+
+    <!--<script src="{% static "js/bootstrap.min.js"%}">-->
+    {% load bootstrap3 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
 </head>
+
 <body>
-    <form action="/index/" method="post"> <!--post请求地址结尾必须带/-->
-        UserName:
-        <input type="text" name="username">
-        <br>
-        PassWord:
-        <input type="password" name="password">
-        <br>
-        <div style="color: red">{{error}}</div>
-         {% csrf_token %}
-        <input type="submit" value="Login">
-    </form>
+    <div class="container">
+        <div class="form row">
+            <div class="form-horizontal col-md-offset-3" id="login_form">
+                <h3 class="form-title">登录</h3>
+                <form action="/index/" method="post">
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <i class="fa fa-user fa-lg"></i>
+                            <input class="form-control required" type="text" placeholder="Username" id="username" name="username" autofocus="autofocus" maxlength="20"/>
+                        </div>
+                        <div class="form-group">
+                                <i class="fa fa-lock fa-lg"></i>
+                                <input class="form-control required" type="password" placeholder="Password" id="password" name="password" maxlength="8"/>
+                        </div>
+                        <div style="color: red">{{error}}</div>
+                        <div class="form-group">
+                            <label class="checkbox">
+                                <input type="checkbox" name="remember" value="1"/>记住我
+                            </label>
+                        </div>
+                        {% csrf_token %}
+                        <div class="form-group col-md-offset-9">
+                            <!--<input type="submit" class="btn btn-success pull-right" value="Login" name="submit">-->
+                            <button type="submit" class="btn btn-success pull-right" name="submit">登录</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
+<!--<body>-->
+    <!--<form action="/index/" method="post"> &lt;!&ndash;post请求地址结尾必须带/&ndash;&gt;-->
+        <!--UserName:-->
+        <!--<input type="text" name="username">-->
+        <!--<br>-->
+        <!--PassWord:-->
+        <!--<input type="password" name="password">-->
+        <!--<br>-->
+        <!--<div style="color: red">{{error}}</div>-->
+         <!--{% csrf_token %}-->
+        <!--<input type="submit" value="Login">-->
+    <!--</form>-->
+<!--</body>-->
 </html>
