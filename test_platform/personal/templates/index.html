@@ -3,9 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>index</title>
-    <h1 style="color: red;">Hello, World</h1>
 </head>
 <body>
-
+    <form action="/index/" method="post"> <!--post请求地址结尾必须带/-->
+        UserName:
+        <input type="text" name="username">
+        <br>
+        PassWord:
+        <input type="password" name="password">
+        <br>
+        <div style="color: red">{{error}}</div>
+         {% csrf_token %}
+        <input type="submit" value="Login">
+    </form>
 </body>
 </html>

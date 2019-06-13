@@ -26,7 +26,7 @@ Python Django2.0搭建自动化测试平台
 
 ## django项目创建
 ### 创建项目
-- django-admin startproject test_auto
+- django-admin startproject test_platform
 
 ### 运行项目
 - python manage.py runserver
