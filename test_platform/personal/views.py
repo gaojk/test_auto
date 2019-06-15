@@ -45,13 +45,19 @@ def index(request):
             return render(request, "index.html", {"error": "用户名或密码为错误!"})
         else:
             auth.login(request, user)  # 记录用户登录的状态
-            return HttpResponseRedirect('/manage/')  # 重定向
+            return HttpResponseRedirect('/project/')  # 重定向
 
 
 # 项目管理
 @login_required
-def manage(request):
-    return render(request, 'manage.html')
+def project_manage(request):
+    return render(request, 'project.html')
+
+
+# 模块管理
+@login_required
+def module_manage(request):
+    return render(request, 'module.html')
 
 
 # 处理用户的退出
