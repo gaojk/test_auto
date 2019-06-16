@@ -209,6 +209,42 @@ python --  PyMySQL(驱动) -- mysql
 
 [PyMySQL Github地址](https://github.com/PyMySQL/PyMySQL) 这种方式的缺点是在编程语言夹杂了大量的SQL语句
 
+## 切换MySQL
+[配置mysql参考文档](https://docs.djangoproject.com/en/2.1/ref/databases/)
 
+- 先安装一个MySQL数据库
+- 在项目根目录创建一个配置文件my.cnf文件。
+```
+[client]
+host = 127.0.0.1
+port = 3306
+user = root
+password = pyif07
+database = test_dev
+default-character-set = utf8
+```
+- settings.py添加配置：
+```python
+# MySQL
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+            'read_default_file': BASE_DIR + '/my.cnf',
+        },
+    }
+}
+```
+- 安装mysqlclient
+```
+ pip install mysqlclient
+```
+- 重新执行数据库迁移和创建超级管理账号
+```
+python manage.py migrate
 
+python manage.py createsuperuser
+```
+
+## 模板
 

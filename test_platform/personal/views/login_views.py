@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth  # 认证模块
-from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -46,18 +45,6 @@ def index(request):
         else:
             auth.login(request, user)  # 记录用户登录的状态
             return HttpResponseRedirect('/project/')  # 重定向
-
-
-# 项目管理
-@login_required
-def project_manage(request):
-    return render(request, 'project.html')
-
-
-# 模块管理
-@login_required
-def module_manage(request):
-    return render(request, 'module.html')
 
 
 # 处理用户的退出
