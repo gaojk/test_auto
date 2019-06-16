@@ -25,8 +25,13 @@ urlpatterns = [
     path('index/', login_views.index),
     path('', login_views.index),
     path('accounts/login/', login_views.index),
+
     path('project/', project_views.project_manage),
     path('project/add_project/', project_views.add_project),
+    path('project/edit_project/<int:pid>/', project_views.edit_project),
+    path('project/delete_project/<int:pid>', project_views.delete_project),
+
     path('module/', module_views.module_manage),
+
     path('logout/', login_views.logout)
 ]

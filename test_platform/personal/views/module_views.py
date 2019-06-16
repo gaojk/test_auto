@@ -11,4 +11,5 @@ def module_manage(request):
     :param request:
     :return:
     """
-    return render(request, 'module.html')
+    module_all = Module.objects.all()
+    return render(request, 'module.html', {"modules": module_all})

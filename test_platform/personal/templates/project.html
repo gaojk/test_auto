@@ -49,7 +49,9 @@
             <!--项目列表-->
             {% if type == "list" %}
             <h2 class="sub-header">项目列表
-                <button type="button" class="btn btn-xs btn-primary" style="float: right;" onclick="location.href='/project/add_project/'">Add Project</button>
+                <button type="button" class="btn btn-xs btn-primary" style="float: right;"
+                        onclick="location.href='/project/add_project/'">Add Project
+                </button>
             </h2>
             <div class="table-responsive">
                 <table class="table table-striped">
@@ -60,6 +62,7 @@
                         <th>Description</th>
                         <th>Status</th>
                         <th>Create Time</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     {% for project in projects %}
@@ -76,6 +79,10 @@
                             {% endif %}
                         </td>
                         <td>{{ project.create_time | date:"Y-m-d H:i:s" }}</td> <!--日期格式化-->
+                        <td>
+                            <a href="/project/edit_project/{{ project.id }}/" class="glyphicon glyphicon-pencil" style="width: 30px"></a>
+                            <a href="/project/delete_project/{{ project.id }}" class="glyphicon glyphicon-trash"></a>
+                        </td>
                     </tr>
                     </tbody>
                     {% endfor %}
@@ -83,13 +90,62 @@
             </div>
             {% endif %}
 
-             <!--添加项目-->
+            <!--添加项目-->
             {% if type == "add" %}
-                <h4 class="sub-header">编辑项目</h4>
-                <form action="/project/add_project/{{ id }}/" method="post">
-                    {{ form.as_p }}
-                    <input class="form-horizontal" type="submit" value="保存">
-                </form>
+            <h4 class="sub-header">Add Project</h4>
+            <form class="form-horizontal" method="post" action="/project/add_project/">
+                <div class="control-group">
+                    <label class="control-label">Project Name</label>
+                    <div class="controls">
+                        <input type="text" name="name" class="form-control">
+                        <span style="color: red">{{ name_error }}</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Description</label>
+                    <div class="controls">
+                        <div class="textarea">
+                            <textarea class="form-control" name="describe" style="width:990px"> </textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Status</label>
+                    <div class="controls" style="height: 30px;">
+                        <label class="radio inline" style="left: 20px; float: left;">
+                            <input type="radio" value="1" checked="checked" name="status">
+                            Open
+                        </label>
+                        <label class="radio inline" style="left: 80px; float: left;">
+                            <input type="radio" value="0" name="status">
+                            Close
+                        </label>
+                    </div>
+                </div>
+
+                {% csrf_token %}
+                <div class="control-group">
+                    <div class="controls">
+                        <button class="btn btn-success">Save</button>
+                    </div>
+                </div>
+            </form>
+            {% endif %}
+
+            <!--编辑项目-->
+            {% if type == "edit" %}
+            <h4 class="sub-header">Edit Project</h4>
+            <form action="/project/edit_project/{{ id }}/" method="post">
+                <div>
+                    {{ project_form.as_p }}
+                </div>
+                {% csrf_token %}
+                <div class="controls">
+                    <button class="btn btn-success">Save</button>
+                </div>
+            </form>
             {% endif %}
         </div>
     </div>
