@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from personal.models.module import Module
-from personal.forms import ModuleForms
+from module_app.models import Module
+from module_app.forms import ModuleForms
 
 
 # 模块管理
@@ -71,11 +71,11 @@ def edit_module(request, mid):
             describe = form.cleaned_data['describe']
             project = form.cleaned_data['project']
 
-            p = Module.objects.get(id=mid)
-            p.name = name
-            p.describe = describe
-            p.project = project
-            p.save()
+            m = Module.objects.get(id=mid)
+            m.name = name
+            m.describe = describe
+            m.project = project
+            m.save()
         return HttpResponseRedirect("/module/")
 
 

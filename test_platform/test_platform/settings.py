@@ -36,7 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',  # 必须有,才可以配置本地静态文件
-    'personal',
+    'login_app',
+    'project_app',
+    'module_app',
     'bootstrap3'
 ]
 
@@ -55,7 +57,7 @@ ROOT_URLCONF = 'test_platform.urls'  # 最高权限url指向
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

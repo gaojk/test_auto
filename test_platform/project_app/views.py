@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from personal.models.project import Project
-from personal.forms import ProjectForms
+from project_app.models import Project
+from project_app.forms import ProjectForms
 
 
 # 项目管理

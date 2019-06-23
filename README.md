@@ -253,3 +253,16 @@ python manage.py createsuperuser
 - [参考文档](https://docs.djangoproject.com/en/2.1/topics/forms/modelforms/)
 
 
+# 重构
+在功能不变的基础上修改代码的结构
+## 按功能划分创建应用
+- pyhton manage.py startapp personal
+
+## 创建应用
+- login_app
+- project_app
+- module_app
+
+## 重新执行数据库的同步
+- python manage.py makemigrations
+- python manage.py migrate
