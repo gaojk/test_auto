@@ -1,76 +1,118 @@
 {% extends "base.html" %}
 {% block base %}
 <nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/project/">接口测试平台</a>
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/project/">接口测试平台</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="/logout/">Logout</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Search...">
+            </form>
+        </div>
     </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Settings</a></li>
-        <li><a href="#">Profile</a></li>
-        <li><a href="/logout/">Logout</a></li>
-      </ul>
-      <form class="navbar-form navbar-right">
-        <input type="text" class="form-control" placeholder="Search...">
-      </form>
-    </div>
-  </div>
 </nav>
 
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-sm-3 col-md-2 sidebar">
-      <ul class="nav nav-sidebar">
-        <li>
-          <a href="/project/" class="glyphicon glyphicon-th-large">&nbsp;项目管理</a>
-        </li>
-        <li class="active">
-          <a href="/module/" class="glyphicon glyphicon-th">&nbsp;模块管理</a>
-        </li>
-      </ul>
-      <ul class="nav nav-sidebar">
-        <li><a href="">用例管理</a></li>
-        <li><a href="">任务管理</a></li>
-      </ul>
-      <ul class="nav nav-sidebar">
-        <li><a href="">Mock Server</a></li>
-        <li><a href="">测试工具</a></li>
-      </ul>
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li>
+                    <a href="/project/" class="glyphicon glyphicon-th-large">&nbsp;项目管理</a>
+                </li>
+                <li class="active">
+                    <a href="/module/" class="glyphicon glyphicon-th">&nbsp;模块管理</a>
+                </li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="">用例管理</a></li>
+                <li><a href="">任务管理</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="">Mock Server</a></li>
+                <li><a href="">测试工具</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <!-- 模块列表 -->
+            {% if type == "list" %}
+            <h2 class="sub-header">模块列表
+                <button type="button" class="btn btn-xs btn-primary" style="float: right;"
+                        onclick="location.href='/module/add_module/'">Add Module
+                </button>
+            </h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Module Name</th>
+                        <th>Description</th>
+                        <th>Project ID</th>
+                        <th>Create Time</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    {% for module in modules %}
+                    <tbody>
+                    <tr>
+                        <td>{{ module.id }}</td>
+                        <td>{{ module.name }}</td>
+                        <td>{{ module.describe }}</td>
+                        <td>{{ module.project_id }}</td>
+                        <td>{{ module.create_time | date:"Y-m-d H:i:s" }}</td>
+                    </tr>
+                    <td>
+                        <a href="/module/edit_module/{{ module.id }}/" class="glyphicon glyphicon-pencil"
+                           style="width: 30px"></a>
+                        <a href="/module/delete_module/{{ module.id }}" class="glyphicon glyphicon-trash"></a>
+                    </td>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+            {% endif %}
+
+            <!--添加模块-->
+            {% if type == "add" %}
+            <h4 class="sub-header">Add Module</h4>
+            <form action="/module/add_module/" method="post">
+                <div>
+                    {{ module_form.as_p }}
+                </div>
+                {% csrf_token %}
+                <div class="controls">
+                    <button class="btn btn-success">Add</button>
+                </div>
+            </form>
+            {% endif %}
+
+            <!--编辑项目-->
+            {% if type == "edit" %}
+            <h4 class="sub-header">Edit Project</h4>
+            <form action="/module/edit_module/{{ id }}/" method="post">
+                <div>
+                    {{  module_form.as_p }}
+                </div>
+                {% csrf_token %}
+                <div class="controls">
+                    <button class="btn btn-success">Save</button>
+                </div>
+            </form>
+            {% endif %}
+        </div>
     </div>
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-      <h2 class="sub-header">模块列表</h2>
-      <div class="table-responsive">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Module Name</th>
-              <th>Description</th>
-              <th>Project ID</th>
-              <th>Create Time</th>
-            </tr>
-          </thead>
-          {% for module in modules %}
-          <tbody>
-            <tr>
-              <td>{{ module.id }}</td>
-              <td>{{ module.name }}</td>
-              <td>{{ module.describe }}</td>
-              <td>{{ module.project_id }}</td>
-              <td>{{ module.create_time | date:"Y-m-d H:i:s" }}</td>
-            </tr>
-          </tbody>
-          {% endfor %}
-        </table>
-      </div>
-    </div>
-  </div>
 </div>
 {% endblock %}

@@ -1,5 +1,6 @@
 from django import forms
 from personal.models import Project
+from personal.models import Module
 
 
 class ProjectForms(forms.ModelForm):
@@ -10,3 +11,9 @@ class ProjectForms(forms.ModelForm):
     class Meta:
         model = Project
         fields = ['name', 'describe', 'status']
+
+
+class ModuleForms(forms.ModelForm):
+    class Meta:
+        model = Module
+        fields = ['name', 'describe', 'project']
