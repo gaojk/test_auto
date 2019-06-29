@@ -148,7 +148,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
 
 <script type="text/javascript">
-    SelectInit();
+    //SelectInit("selectProject");
+
+    // 调用项目的初始化
+    ProjectInit("selectProject");
+
+    //监听项目列表变化
+    $("#selectProject").change(function(){
+        let project_id = $(this).children('option:selected').val();
+        console.log("选择的项目id:", project_id);
+        ModuleInit("selectModule", project_id);
+    });
+
 
     //发送方法
     function sendFun() {
