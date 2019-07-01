@@ -18,10 +18,9 @@ class TestCase(models.Model):
     parameter_body = models.TextField("参数内容", null=False)
     result = models.TextField("结果", null=False)
     assert_type = models.IntegerField("断言类型", null=False)  # 1：包含contains 2: 匹配mathches
-    assert_text = models.TextField("结果", null=False)
+    assert_text = models.TextField("断言结果", null=False)
     create_time = models.DateTimeField("创建时间", auto_now_add=True)
-    status = models.BooleanField("状态", default=True)   # 控制用例的删除
-
+    status = models.BooleanField("状态", default=True)  # 控制用例的删除
 
     def __str__(self):
-        return self.name
+        return self.case_name

@@ -49,23 +49,35 @@
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <!-- 模块列表 -->
-            {% if type == "debug" %}
             <h2 class="sub-header">添加用例</h2>
 
-             <div class="input-group">
+            <div class="input-group" style="top:10px">
+                <span class="input-group-addon">用例名称</span>
+                <input id="case_name" type="text" class="form-control">
+            </div>
+
+            <br><br>
+
+            <div class="input-group">
                 <span class="input-group-addon">URL</span>
                 <input id="req_url" type="text" class="form-control" value="http://">
             </div>
 
             <br>
 
-             <div>
+            <div>
                 <label>* 请求方法：</label>
                 <label class="radio-inline">
                     <input type="radio" name="req_method" id="get" value="get" checked> GET
                 </label>
                 <label class="radio-inline">
                     <input type="radio" name="req_method" id="post" value="post"> POST
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="req_method" id="put" value="put"> PUT
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="req_method" id="delete" value="delete"> DELETE
                 </label>
             </div>
 
@@ -118,7 +130,7 @@
             </div>
 
             <!-- 下拉二级联动 -->
-             <div style="margin-top: 20px;">
+            <div style="margin-top: 20px;">
                 <label style="float: left">项目：</label>
                 <select class="form-control select2-single" id="selectProject" style="width: 180px">
                 </select>
@@ -128,23 +140,15 @@
                 </select>
             </div>
 
-            <div class="input-group" style="top:10px">
-                <span class="input-group-addon">名称</span>
-                <input id="case_name" type="text" class="form-control">
-            </div>
-
             <div style="float: right; margin-top: 20px;">
                 <button type="button" class="btn btn-primary" onclick="saveFun()">保存</button>
             </div>
-
-            {% endif %}
-
         </div>
     </div>
 </div>
 
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
 
 <script type="text/javascript">
@@ -154,7 +158,7 @@
     ProjectInit("selectProject");
 
     //监听项目列表变化
-    $("#selectProject").change(function(){
+    $("#selectProject").change(function () {
         let project_id = $(this).children('option:selected').val();
         console.log("选择的项目id:", project_id);
         ModuleInit("selectModule", project_id);
@@ -174,15 +178,15 @@
         }
         window.alert("已发送请求！");
         $.post("/testcase/debug/", {
-            url: url,
-            method: method,
-            header: header,
-            type: type,
-            parameter: parameter
-        },
-        function (resp) {
-            document.querySelector("#result").value = resp.result;
-        });
+                    url: url,
+                    method: method,
+                    header: header,
+                    type: type,
+                    parameter: parameter
+                },
+                function (resp) {
+                    document.querySelector("#result").value = resp.result;
+                });
     }
 
     //断言方法
@@ -198,13 +202,59 @@
             return;
         }
         $.post("/testcase/assert/", {
-            result: result_text,
-            assert: assert_text,
-            assert_type: assert_type
-        },
-        function (data) {
-            alert("提示：" + data.result);
-            console.log("返回的结果", data.result);
+                    result: result_text,
+                    assert: assert_text,
+                    assert_type: assert_type
+                },
+                function (data) {
+                    alert("提示：" + data.result);
+                    console.log("返回的结果", data.result);
+                });
+    }
+
+    // 保存用例
+    function saveFun() {
+        //接口的基本数据
+        var url = $("#req_url").val();
+        var method = $('input[name="req_method"]:checked').val();
+        var header = $("#header").val();
+        var parameter_type = $('input[name="par_type"]:checked').val();
+        var parameter_body = $("#parameter").val();
+        // 断言的数据
+        var assert_type = $('input[name="assert_type"]:checked').val();
+        var assert_text = $("#assert").val();
+        // 保存的数据
+        var module_id = $('select[id="selectModule"]').val();
+        var case_name = $("#case_name").val();
+        if (url === "") {
+            window.alert("URL不能为空！");
+            return;
+        }else if (assert_type == "" || assert_text === ""){
+            window.alert("断言的类型或参数不能为空！");
+            return;
+        }
+        else if(case_name == ""){
+            window.alert("用例名称不能为空！");
+            return;
+        } else if (module_id == "") {
+            window.alert("所属模块不能为空！");
+            return;
+        }
+        //window.alert("parameter:" + parameter);
+        $.post("/testcase/save_case/", {
+            url: url,
+            method: method,
+            header: header,
+            par_type: parameter_type,
+            par_body: parameter_body,
+            ass_type: assert_type,
+            ass_text: assert_text,
+            mid: module_id,
+            name: case_name,
+            status: 2
+        }, function (data) {
+            console.log("返回的结果", data);
+            window.alert(data.message);
         });
     }
 

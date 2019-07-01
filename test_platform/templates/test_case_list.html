@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block base %}
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/project/">接口测试平台</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="/logout/">Logout</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Search...">
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li>
+                    <a href="/project/" class="glyphicon glyphicon-th-large">&nbsp;项目管理</a>
+                </li>
+                <li>
+                    <a href="/module/" class="glyphicon glyphicon-th">&nbsp;模块管理</a>
+                </li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li class="active">
+                    <a href="/testcase/" class="glyphicon glyphicon-list-alt">&nbsp;用例管理</a>
+                </li>
+                <li><a href="" class="glyphicon glyphicon-th-list">&nbsp;任务管理</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="" class="glyphicon glyphicon-log-in">&nbsp;Mock Server</a></li>
+                <li><a href="" class="glyphicon glyphicon-wrench">&nbsp;测试工具</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <!-- 测试用例列表 -->
+            {% if type == "list" %}
+            <h2 class="sub-header">测试用例列表
+                <button type="button" class="btn btn-xs btn-primary" style="float: right;"
+                        onclick="location.href='/testcase/add_case/'">Add Test Case
+                </button>
+            </h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Case Name</th>
+                        <th>URL</th>
+                        <th>Method</th>
+                        <th>Create Time</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    {% for case in cases %}
+                    <tbody>
+                    <tr>
+                        <td>{{ case.id }}</td>
+                        <td>{{ case.case_name }}</td>
+                        <td>{{ case.url }}</td>
+                        <td>
+                            {% if case.method == 1 %}
+                            GET
+                            {% elif case.method == 2 %}
+                            POST
+                            {% elif case.method == 3 %}
+                            PUT
+                            {% elif case.method == 4 %}
+                            DELETE
+                            {% endif %}
+                        </td>
+                        <td>{{ case.create_time | date:"Y-m-d H:i:s" }}</td> <!--日期格式化-->
+                        <td>
+                            <a href="/testcase/edit_case/{{ case.id }}/" class="glyphicon glyphicon-pencil" style="width: 30px"></a>
+                            <a href="/testcase/delete_case/{{ case.id }}/" class="glyphicon glyphicon-trash"></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
