@@ -1,8 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 import requests, json
 from test_case_app.models import TestCase
 from module_app.models import Module
+from project_app.models import Project
+
 
 # Create your views here.
 def testcase_manage(request):
@@ -11,10 +14,22 @@ def testcase_manage(request):
     :param request:
     :return:
     """
-    case_list = TestCase.objects.all().order_by('id')
+    case_list = TestCase.objects.all()
+    # 将数据做分页处理，每一页显示 3 条
+    p = Paginator(case_list, 1)
+    # 通过请求得到要第几页的数据
+    page = request.GET.get('page')
+    try:
+        cases = p.page(page)
+    except PageNotAnInteger:
+        # 如果页数不是整型, 取第一页.
+        cases = p.page(1)
+    except EmptyPage:
+        # 如果页数超出查询范围，取最后一页
+        cases = p.page(p.num_pages)
 
     return render(request, "test_case_list.html", {"type": "list",
-                                                   "cases": case_list
+                                                   "cases": cases
                                                    })
 
 
@@ -42,7 +57,9 @@ def testcase_delete(request, cid):
     :param request:
     :return:
     """
-    pass
+    case = TestCase.objects.get(id=cid)
+    case.delete()
+    return HttpResponseRedirect("/testcase/")
 
 
 def testcase_debug(request):
@@ -152,7 +169,6 @@ def testcase_save_case(request):
         print("module_id", module_id)
         print("name", name)
         print("cid", cid)
-
         if name == "":
             return JsonResponse({"status": 10101, "message": "用例名称不能为空"})
 
@@ -189,10 +205,10 @@ def testcase_save_case(request):
             return JsonResponse({"status": 10104, "message": "未知的断言类型"})
 
         if cid == "":
-            ret = TestCase.objects.create(case_name=name, module_id=module_id,
-                                          url=url, method=method_number, header=header,
-                                          parameter_type=parameter_number, parameter_body=parameter_body,
-                                          assert_type=assert_number, assert_text=assert_text)
+            TestCase.objects.create(case_name=name, module_id=module_id,
+                                    url=url, method=method_number, header=header,
+                                    parameter_type=parameter_number, parameter_body=parameter_body,
+                                    assert_type=assert_number, assert_text=assert_text)
         else:
             case = TestCase.objects.get(id=cid)
             case.name = name
@@ -238,6 +254,38 @@ def testcase_get_case_info(request):
             "project_id": project_id,
         }
         return JsonResponse({"status": 10200, "message": "请求成功", "data": case_dict})
+
+    else:
+        return JsonResponse({"status": 10100, "message": "请求方法错误"})
+
+
+def get_select_data(request):
+    """
+    获取 "项目>模块" 列表
+    :param request:
+    :return: 项目接口列表
+    """
+    if request.method == "GET":
+        project_list = Project.objects.all()
+        data_list = []
+        for project in project_list:
+            project_dict = {
+                "id": project.id,
+                "name": project.name
+            }
+
+            module_list = Module.objects.filter(project_id=project.id)
+            module_name = []
+            for module in module_list:
+                module_name.append({
+                    "id": module.id,
+                    "name": module.name,
+                })
+
+            project_dict["moduleList"] = module_name
+            data_list.append(project_dict)
+
+        return JsonResponse({"status": 10200, "message": "success", "data": data_list})
 
     else:
         return JsonResponse({"status": 10100, "message": "请求方法错误"})

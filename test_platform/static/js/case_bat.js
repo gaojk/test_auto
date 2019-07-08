@@ -59,6 +59,21 @@ var ModuleInit = function(_cmbModule, pid){
     getModuleListInfo();
 };
 
+var SelectModule = function(mid){
+    let option  =  document.querySelectorAll("#selectModule");
+    console.log("module", option.length);
+    for(let i=0;i<option.length;i++){
+        let v2 = option[i].value;
+        if(v2 == mid ){
+            console.log("所属的模块id...>>", v2);
+            option[i].selected = true;
+            let text = option[i].text;
+            console.log("所属的模块名称...>>", text);
+            document.querySelectorAll(".form-control.select2-single");
+        }
+    }
+}
+
 //获取用例信息
 var TestCaseInit = function () {
 
@@ -75,6 +90,9 @@ var TestCaseInit = function () {
         cid: cid,
     },
     function (resp, status) {
+
+        ModuleInit("selectModule", resp.data.project_id);
+
         console.log("返回的结果", resp.data);
         var result = resp.data;
 
@@ -120,8 +138,22 @@ var TestCaseInit = function () {
         //用例的名称
         document.querySelector("#case_name").value = result.name;
 
+        let options  =  document.querySelectorAll("#selectProject");
+        console.log("project", options.length);
+        for(let i=0;i<options.length;i++){
+            let v2 = options[i].value;
+            if(v2 == resp.data.project_id ){
+                console.log("所属的模块id...>>", v2);
+                options[i].selected = true;
+                let text = options[i].text;
+                console.log("所属的模块名称...>>", text);
+                document.querySelectorAll(".form-control.select2-single");
+        }
+    }
+
+        SelectModule(resp.module_id);
         // 初始化菜单
-        SelectInit(result.project_id, result.module_id);
+        //SelectInit(result.project_id, result.module_id);
 
     });
 

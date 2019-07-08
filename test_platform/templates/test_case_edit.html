@@ -205,6 +205,9 @@
 
     // 保存用例
     function saveFun() {
+        var local_url = document.location;
+        var cid = local_url.pathname.split("/")[3];
+
         //接口的基本数据
         var url = $("#req_url").val();
         var method = $('input[name="req_method"]:checked').val();
@@ -231,7 +234,6 @@
             window.alert("所属模块不能为空！");
             return;
         }
-        //window.alert("parameter:" + parameter);
         $.post("/testcase/save_case/", {
             url: url,
             method: method,
@@ -242,10 +244,12 @@
             ass_text: assert_text,
             mid: module_id,
             name: case_name,
-            status: 2
-        }, function (data) {
-            console.log("返回的结果", data);
-            window.alert(data.message);
+            cid: cid
+        }, function (resp) {
+            if (resp.status === 10200) {
+                window.alert("保存成功！");
+            }
+
         });
     }
 

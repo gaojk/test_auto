@@ -14,5 +14,6 @@ urlpatterns = [
 
     # 接口
     path('get_case_info/', views.testcase_get_case_info),
+    path('get_select_data/', views.get_select_data),
 
 ]
