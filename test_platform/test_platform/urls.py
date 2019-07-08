@@ -33,5 +33,8 @@ urlpatterns = [
     path('module/', include('module_app.urls')),
 
     # test_case
-    path('testcase/', include('test_case_app.urls'))
+    path('testcase/', include('test_case_app.urls')),
+
+    # test_task
+    path('testtask/', include('test_task_app.urls'))
 ]

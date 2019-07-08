@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'project_app',
     'module_app',
     'test_case_app',
+    'test_task_app',
     'bootstrap3'
 ]
 

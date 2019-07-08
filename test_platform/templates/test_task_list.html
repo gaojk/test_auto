@@ -37,10 +37,12 @@
                 </li>
             </ul>
             <ul class="nav nav-sidebar">
-                <li class="active">
+                <li>
                     <a href="/testcase/" class="glyphicon glyphicon-list-alt">&nbsp;用例管理</a>
                 </li>
-                <li><a href="/testtask/" class="glyphicon glyphicon-th-list">&nbsp;任务管理</a></li>
+                <li class="active">
+                    <a href="/testtask/" class="glyphicon glyphicon-th-list">&nbsp;任务管理</a>
+                </li>
             </ul>
             <ul class="nav nav-sidebar">
                 <li><a href="" class="glyphicon glyphicon-log-in">&nbsp;Mock Server</a></li>
@@ -50,9 +52,9 @@
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <!-- 测试用例列表 -->
             {% if type == "list" %}
-            <h2 class="sub-header">测试用例列表
+            <h2 class="sub-header">任务列表
                 <button type="button" class="btn btn-xs btn-primary" style="float: right;"
-                        onclick="location.href='/testcase/add_case/'">Add Test Case
+                        onclick="location.href='/testtask/add_task/'">Add Test Task
                 </button>
             </h2>
             <div class="table-responsive">
@@ -86,9 +88,9 @@
                         </td>
                         <td>{{ case.create_time | date:"Y-m-d H:i:s" }}</td> <!--日期格式化-->
                         <td>
-                            <a href="/testcase/edit_case/{{ case.id }}/" class="glyphicon glyphicon-pencil"
+                            <a href="/testtask/edit_task/{{ case.id }}/" class="glyphicon glyphicon-pencil"
                                style="width: 30px"></a>
-                            <a href="/testcase/delete_case/{{ case.id }}/" class="glyphicon glyphicon-trash"></a>
+                            <a href="/testcase/delete_task/{{ case.id }}/" class="glyphicon glyphicon-trash"></a>
                         </td>
                     </tr>
                     </tbody>
@@ -123,6 +125,33 @@
                 </nav>
             </div>
             {% endif %}
+
+            <!--添加任务-->
+			{% if type == "add" %}
+				{% block taskadd %}
+
+				<!-- 其他页面可以继承 test_task_list.html  -->
+
+				{% endblock %}
+            {% endif %}
+
+            <!--编辑任务-->
+			{% if type == "edit" %}
+				{% block taskedit %}
+
+				<!-- 其他页面可以继承 test_task_list.html  -->
+
+				{% endblock %}
+			{% endif %}
+
+			<!--查看结果-->
+			{% if type == "result" %}
+				{% block taskresult %}
+
+				<!-- 其他页面可以继承 test_task_list.html  -->
+
+				{% endblock %}
+			{% endif %}
 
         </div>
     </div>
