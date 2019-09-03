@@ -42,7 +42,7 @@
     };
     $(document).ready(function () {
         // 调用获取用例树
-        $.get("/testtask/get_case_tree/", {}, function (resp) {
+        $.get("/testtask/get_case_tree", {}, function (resp) {
             if (resp.status === 10200) {
                 var zNodes = resp.data;
                 zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
@@ -50,6 +50,7 @@
             }
         });
     });
+
     //保存用例
     function saveFun() {
         //接口的基本数据
@@ -75,18 +76,17 @@
         casesStr = JSON.stringify(cases)
 
         $.post("/testtask/save_task/", {
-                    task_id: 0,
-                    name: name,
-                    desc: desc,
-                    cases: casesStr
-                },
-                function (resp) {
-                    if (resp.status == 10200) {
-                        window.alert("创建任务成功！")
-                    }
-                });
-    }
-    ;
+                task_id: 0,
+                name: name,
+                desc: desc,
+                cases: casesStr
+            },
+            function (resp) {
+                if (resp.status == 10200) {
+                    window.alert("创建任务成功！")
+                }
+            });
+    };
 </script>
 
 {% endblock %}

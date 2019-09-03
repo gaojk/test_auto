@@ -16,7 +16,7 @@ def testcase_manage(request):
     """
     case_list = TestCase.objects.all()
     # 将数据做分页处理，每一页显示 3 条
-    p = Paginator(case_list, 1)
+    p = Paginator(case_list, 10)
     # 通过请求得到要第几页的数据
     page = request.GET.get('page')
     try:

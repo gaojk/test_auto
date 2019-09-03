@@ -49,14 +49,15 @@
             "tid": tid,
         }, function (resp) {
             if (resp.status === 10200) {
-                document.querySelector("#name").value = resp.data.name;
-                document.querySelector("#description").value = resp.data.desc;
+                document.querySelector("#name").value = resp.data.name; // 获取任务的名称
+                document.querySelector("#description").value = resp.data.desc; //获取任务的描述
                 var zNodes = resp.data.cases;
                 zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
                 zTreeObj.expandAll(true);  //设置默认展开
             }
         });
     });
+
     //保存用例
     function saveFun() {
         let local_url = document.location;
@@ -80,18 +81,17 @@
         // 将列表转为字符串
         casesStr = JSON.stringify(cases)
         $.post("/testtask/save_task/", {
-                    task_id: tid,
-                    name: name,
-                    desc: desc,
-                    cases: casesStr
-                },
-                function (resp) {
-                    if (resp.status == 10200) {
-                        window.alert("创建任务成功！")
-                    }
-                });
-    }
-    ;
+                task_id: tid,
+                name: name,
+                desc: desc,
+                cases: casesStr
+            },
+            function (resp) {
+                if (resp.status == 10200) {
+                    window.alert("创建任务成功！")
+                }
+            });
+    };
 </script>
 
 {% endblock %}

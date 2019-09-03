@@ -62,96 +62,80 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Case Name</th>
-                        <th>URL</th>
-                        <th>Method</th>
+                        <th>Task Name</th>
+                        <th>Status</th>
                         <th>Create Time</th>
                         <th>Action</th>
                     </tr>
                     </thead>
-                    {% for case in cases %}
+                    {% for task in tasks %}
                     <tbody>
                     <tr>
-                        <td>{{ case.id }}</td>
-                        <td>{{ case.case_name }}</td>
-                        <td>{{ case.url }}</td>
+                        <td>{{ task.id }}</td>
+                        <td>{{ task.name }}</td>
+                        {% if task.status == 0 %}
+                        <td>未执行</td>
+                        {% endif %}
+
+                        {% if task.status == 1 %}
+                        <td>执行中</td>
+                        {% endif %}
+
+                        {% if task.status == 2 %}
+                        <td>已完成</td>
+                        {% endif %}
+
+                        <td>{{ task.create_time | date:"Y-m-d H:i:s" }}</td>
                         <td>
-                            {% if case.method == 1 %}
-                            GET
-                            {% elif case.method == 2 %}
-                            POST
-                            {% elif case.method == 3 %}
-                            PUT
-                            {% elif case.method == 4 %}
-                            DELETE
-                            {% endif %}
-                        </td>
-                        <td>{{ case.create_time | date:"Y-m-d H:i:s" }}</td> <!--日期格式化-->
-                        <td>
-                            <a href="/testtask/edit_task/{{ case.id }}/" class="glyphicon glyphicon-pencil"
-                               style="width: 30px"></a>
-                            <a href="/testcase/delete_task/{{ case.id }}/" class="glyphicon glyphicon-trash"></a>
+                            <a href="/testtask/edit_task/{{task.id}}/" style="margin-right: 8px;">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </a>
+
+                            <a href="/testtask/delete_task/{{task.id}}/" style="margin-right: 8px;">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+
+                            <a href="#" onclick="RunTask('{{task.id}}')" style="margin-right: 8px;">
+                                <span class="glyphicon glyphicon-play"></span>
+                            </a>
+
+                            <a href="/testtask/result/{{task.id}}/" style="margin-right: 8px;">
+                                <span class="glyphicon glyphicon-list-alt"></span>
+                            </a>
                         </td>
                     </tr>
                     </tbody>
                     {% endfor %}
                 </table>
             </div>
-            <!-- 分页器 -->
-            <div>
-                <nav aria-label="Page navigation">
-                    <ul class="pagination">
-                        <li>
-                            {% if cases.has_previous %}
-                            <a href="?page={{ cases.previous_page_number }}" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                            {% endif %}
-                        </li>
-
-                        <li><a href="#">{{ cases.number }}</a></li>
-
-                        {% if cases.has_next %}
-                        <li>
-                            <a href="?page={{ cases.next_page_number }}" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                        {% endif %}
-
-                        <li><a href="#">共：{{ cases.paginator.num_pages }} 页</a></li>
-
-                    </ul>
-                </nav>
-            </div>
             {% endif %}
 
             <!--添加任务-->
-			{% if type == "add" %}
-				{% block taskadd %}
+            {% if type == "add" %}
+            {% block taskadd %}
 
-				<!-- 其他页面可以继承 test_task_list.html  -->
+            <!-- 其他页面可以继承 test_task_list.html  -->
 
-				{% endblock %}
+            {% endblock %}
             {% endif %}
 
             <!--编辑任务-->
-			{% if type == "edit" %}
-				{% block taskedit %}
+            {% if type == "edit" %}
+            {% block taskedit %}
 
-				<!-- 其他页面可以继承 test_task_list.html  -->
+            <!-- 其他页面可以继承 test_task_list.html  -->
 
-				{% endblock %}
-			{% endif %}
+            {% endblock %}
+            {% endif %}
 
-			<!--查看结果-->
-			{% if type == "result" %}
-				{% block taskresult %}
+            <!--查看结果-->
+            {% if type == "result" %}
+            {% block taskresult %}
 
-				<!-- 其他页面可以继承 test_task_list.html  -->
+            <!-- 其他页面可以继承 test_task_list.html  -->
 
-				{% endblock %}
-			{% endif %}
+            {% endblock %}
+            {% endif %}
 
         </div>
     </div>
